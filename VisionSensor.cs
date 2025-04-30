@@ -2,28 +2,47 @@ namespace GameLand;
 
 using static System.Console;
 
+/// <summary>
+/// Simulates the NPC's vision and perception of the game world.
+/// Updates the world state based on what the NPC can see.
+/// </summary>
 class VisionSensor
 {
     Random rand = new Random();
 
+    /// <summary>
+    /// Updates the world state based on what the NPC can perceive
+    /// </summary>
+    /// <param name="worldState">Current state of the game world to update</param>
     public void Update(IDictionary<string, bool> worldState)
     {
+        // Update enemy detection state
         worldState["Enemy.IsInSight"] = SeeEnemy();
         WriteLine($"\t[{this}] Apply effect: {worldState.Single(s=>s.Key == "Enemy.IsInSight")}");
+
+        // Update food detection state
         worldState["Provision.IsInSight"] = SeeFood();
         WriteLine($"\t[{this}] Apply effect: {worldState.Single(s => s.Key == "Provision.IsInSight")}");
     }
 
+    /// <summary>
+    /// Simulates enemy detection logic
+    /// </summary>
+    /// <returns>True if an enemy is detected</returns>
     private bool SeeEnemy()
     {
-        // Логика обнаружения врага
-        return rand.Next(0, 10) > 5; // Например, враг виден
+        // Simulated enemy detection logic
+        return rand.Next(0, 10) > 5; // 50% chance to see an enemy
     }
 
+    /// <summary>
+    /// Simulates food detection logic
+    /// </summary>
+    /// <returns>True if food is detected</returns>
     private bool SeeFood()
     {
-        // Логика обнаружения еды
-        return rand.Next(0, 10) > 5; // Например, еда не видна
+        // Simulated food detection logic
+        return rand.Next(0, 10) > 5; // 50% chance to see food
     }
 }
 

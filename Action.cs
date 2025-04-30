@@ -2,29 +2,57 @@ namespace GameLand;
 
 using static System.Console;
 
+/// <summary>
+/// Represents a single action that an NPC can perform in the game world.
+/// Each action has preconditions that must be met and effects that change the world state.
+/// </summary>
 public class Action
 {
-    //public string Name { get; private set; }
+    /// <summary>
+    /// Conditions that must be true for the action to be possible
+    /// </summary>
     public IDictionary<string, bool> Preconditions { get; private set; }
+
+    /// <summary>
+    /// Changes to the world state that occur when the action is executed
+    /// </summary>
     public IDictionary<string, bool> Effects { get; private set; }
+
+    /// <summary>
+    /// Potential outcomes that might occur when the action is executed
+    /// </summary>
     public IDictionary<string, bool> ExpectedEffects { get; private set; }
+
+    /// <summary>
+    /// Cost of performing this action (used for planning efficiency)
+    /// </summary>
     public int Cost { get; private set; }
 
+    /// <summary>
+    /// Creates a new action with the specified preconditions and effects
+    /// </summary>
+    /// <param name="preconditions">Conditions that must be true to perform the action</param>
+    /// <param name="effects">Changes to the world state when action is executed</param>
+    /// <param name="expectedEffects">Potential outcomes of the action</param>
+    /// <param name="cost">Cost of performing the action</param>
     public Action(
-        //string name,
         IDictionary<string, bool> preconditions,
         IDictionary<string, bool> effects,
         IDictionary<string, bool> expectedEffects = null,
         int cost = 1
     )
     {
-        //Name = name ?? throw new ArgumentNullException(nameof(name));
         Preconditions = preconditions ?? throw new ArgumentNullException(nameof(preconditions));
         Effects = effects ?? throw new ArgumentNullException(nameof(effects));
         ExpectedEffects = expectedEffects ?? new Dictionary<string, bool>();
         Cost = cost;
     }
 
+    /// <summary>
+    /// Checks if this action can be performed in the given world state
+    /// </summary>
+    /// <param name="worldState">Current state of the game world</param>
+    /// <returns>True if all preconditions are met</returns>
     public bool IsPossible(IDictionary<string, bool> worldState)
     {
         if (worldState == null)
@@ -34,6 +62,10 @@ public class Action
         return Preconditions.All(p => worldState[p.Key] == p.Value);
     }
 
+    /// <summary>
+    /// Executes the action, modifying the world state according to its effects
+    /// </summary>
+    /// <param name="worldState">Current state of the game world</param>
     public void Execute(IDictionary<string, bool> worldState)
     {
         if (worldState == null)
